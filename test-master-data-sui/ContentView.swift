@@ -18,7 +18,8 @@ private let dateFormatter: DateFormatter = {
 struct ContentView: View {
     @Environment(\.managedObjectContext)
     var viewContext   
- 
+    @State private var modalDisplayed = false
+
     var body: some View {
         NavigationView {
             MasterView()
@@ -27,10 +28,14 @@ struct ContentView: View {
                     leading: EditButton(),
                     trailing: Button(
                         action: {
-                            withAnimation { Event.create(in: self.viewContext) }
+                            self.modalDisplayed.toggle()
                         }
                     ) { 
                         Image(systemName: "plus")
+                    }.sheet(isPresented: $modalDisplayed, onDismiss: {
+                        self.modalDisplayed.toggle()
+                    }) {
+                        PostContentView()
                     }
                 )
             Text("Detail view content goes here")
@@ -41,33 +46,33 @@ struct ContentView: View {
 
 struct MasterView: View {
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Event.timestamp, ascending: true)], 
+        sortDescriptors: [NSSortDescriptor(keyPath: \Post.timestamp, ascending: true)],
         animation: .default)
-    var events: FetchedResults<Event>
+    var posts: FetchedResults<Post>
 
     @Environment(\.managedObjectContext)
     var viewContext
 
     var body: some View {
         List {
-            ForEach(events, id: \.self) { event in
+            ForEach(posts, id: \.self) { post in
                 NavigationLink(
-                    destination: DetailView(event: event)
+                    destination: DetailView(post: post)
                 ) {
-                    Text("\(event.timestamp!, formatter: dateFormatter)")
+                    Text("\(post.timestamp!, formatter: dateFormatter)")
                 }
             }.onDelete { indices in
-                self.events.delete(at: indices, from: self.viewContext)
+                self.posts.delete(at: indices, from: self.viewContext)
             }
         }
     }
 }
 
 struct DetailView: View {
-    @ObservedObject var event: Event
+    @ObservedObject var post: Post
 
     var body: some View {
-        Text("\(event.timestamp!, formatter: dateFormatter)")
+        Text("\(post.timestamp!, formatter: dateFormatter)")
             .navigationBarTitle("Detail")
     }
 }

@@ -1,9 +1,49 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Event" representedClassName="Event" codeGenerationType="class">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14897.2" systemVersion="19A546d" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Attachment" representedClassName="Attachment" syncable="YES">
+        <attribute name="guid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="thumbnail" optional="YES" attributeType="Binary"/>
+        <relationship name="audioData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AudioData" inverseName="attachment" inverseEntity="AudioData"/>
+        <relationship name="imageData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ImageData" inverseName="attachment" inverseEntity="ImageData"/>
+        <relationship name="post" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Post" inverseName="attachments" inverseEntity="Post"/>
+        <relationship name="videoData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="VideoData" inverseName="attachment" inverseEntity="VideoData"/>
+    </entity>
+    <entity name="AudioData" representedClassName="AudioData" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary"/>
+        <relationship name="attachment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Attachment" inverseName="audioData" inverseEntity="Attachment"/>
+    </entity>
+    <entity name="ImageData" representedClassName="ImageData" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary"/>
+        <relationship name="attachment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Attachment" inverseName="imageData" inverseEntity="Attachment"/>
+    </entity>
+    <entity name="Post" representedClassName="Post">
+        <attribute name="communal" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="content" optional="YES" attributeType="String"/>
+        <attribute name="favorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="guid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="timestamp" optional="YES" attributeType="Date"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="URI"/>
+        <relationship name="attachments" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Attachment" inverseName="post" inverseEntity="Attachment"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Tag" inverseName="posts" inverseEntity="Tag"/>
+        <userInfo/>
+    </entity>
+    <entity name="Tag" representedClassName="Tag" syncable="YES">
+        <attribute name="color" optional="YES" attributeType="Binary"/>
+        <attribute name="guid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="posts" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Post" inverseName="tags" inverseEntity="Post"/>
+    </entity>
+    <entity name="VideoData" representedClassName="VideoData" syncable="YES">
+        <attribute name="data" optional="YES" attributeType="Binary"/>
+        <relationship name="attachment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Attachment" inverseName="videoData" inverseEntity="Attachment"/>
     </entity>
     <elements>
-        <element name="Event" positionX="261" positionY="189" width="128" height="60"/>
+        <element name="Post" positionX="261" positionY="189" width="128" height="178"/>
+        <element name="Attachment" positionX="279" positionY="234" width="128" height="133"/>
+        <element name="ImageData" positionX="297" positionY="243" width="128" height="73"/>
+        <element name="AudioData" positionX="315" positionY="252" width="128" height="73"/>
+        <element name="VideoData" positionX="333" positionY="270" width="128" height="73"/>
+        <element name="Tag" positionX="351" positionY="315" width="128" height="103"/>
     </elements>
 </model>
